@@ -135,6 +135,16 @@
             z-index: 1;
             text-align: center;
             width: 22%;
+            cursor: pointer;
+        }
+
+        /* Hide default radio button but keep accessibility */
+        .risk-point input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
         }
 
         .dot {
@@ -144,12 +154,24 @@
             border: 3px solid var(--secondary);
             border-radius: 50%;
             margin: 0 auto 10px auto;
+            transition: all 0.2s ease;
+        }
+
+        /* Style the dot when radio is checked */
+        .risk-point input[type="radio"]:checked + .dot {
+            background-color: var(--primary);
+            border-color: var(--primary);
         }
 
         .risk-label {
             font-weight: 700;
             font-size: 14px;
             margin-bottom: 5px;
+            transition: color 0.2s ease;
+        }
+
+        .risk-point input[type="radio"]:checked ~ .risk-label {
+            color: var(--accent);
         }
 
         .risk-desc {
@@ -219,18 +241,6 @@
             font-size: 12px;
             color: #555;
             font-style: italic;
-        }
-
-        /* Visual selector circle */
-        .selection-circle {
-            display: inline-block;
-            width: 14px;
-            height: 14px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            margin-right: 8px;
-            position: relative;
-            top: 2px;
         }
 
         textarea {
@@ -357,23 +367,26 @@
         <div class="risk-scale-container">
             <div class="risk-line"></div>
             
-            <div class="risk-point">
+            <label class="risk-point">
+                <input type="radio" name="risk_level" value="advisory">
                 <div class="dot"></div>
                 <div class="risk-label">Advisory</div>
                 <div class="risk-desc">Human in the loop.<br>AI drafts, Human approves.</div>
-            </div>
+            </label>
 
-            <div class="risk-point">
+            <label class="risk-point">
+                <input type="radio" name="risk_level" value="autopilot">
                 <div class="dot"></div>
                 <div class="risk-label">Autopilot</div>
                 <div class="risk-desc">Human on the loop.<br>AI acts, Human can override.</div>
-            </div>
+            </label>
 
-            <div class="risk-point">
+            <label class="risk-point">
+                <input type="radio" name="risk_level" value="autonomous">
                 <div class="dot"></div>
                 <div class="risk-label">Autonomous</div>
                 <div class="risk-desc">Human out of the loop.<br>Fully automated resolution.</div>
-            </div>
+            </label>
         </div>
     </div>
 
@@ -416,7 +429,7 @@
             <h2>Select & Define ONE Pilot Use Case</h2>
         </div>
         <p style="font-size: 13px; color: #555; margin-top: -10px;">
-            Choose <strong>ONE</strong> channel to define for your pilot. Mark the selection circle and leave the others blank.
+            Choose <strong>ONE</strong> channel below to solve a top problem identified in <strong>Section 2</strong>. Define the specific trigger/action.
         </p>
 
         <table>
@@ -432,13 +445,8 @@
                 <!-- Row 1: Survey -->
                 <tr>
                     <td>
-                        <div style="display: flex; align-items: flex-start;">
-                            <div class="selection-circle"></div>
-                            <div>
-                                <span class="scenario-title">In-Survey Triage</span>
-                                <span class="scenario-desc">Real-time feedback interception</span>
-                            </div>
-                        </div>
+                        <span class="scenario-title">In-Survey Triage</span>
+                        <span class="scenario-desc">Real-time feedback interception</span>
                     </td>
                     <td>
                         <textarea placeholder="e.g., Detractor score on 'Mortgage App Ease' or 'Document Upload' failure..."></textarea>
@@ -454,13 +462,8 @@
                 <!-- Row 2: Tickets -->
                 <tr>
                     <td>
-                        <div style="display: flex; align-items: flex-start;">
-                            <div class="selection-circle"></div>
-                            <div>
-                                <span class="scenario-title">Ticket Management</span>
-                                <span class="scenario-desc">Post-interaction recovery</span>
-                            </div>
-                        </div>
+                        <span class="scenario-title">Ticket Management</span>
+                        <span class="scenario-desc">Post-interaction recovery</span>
                     </td>
                     <td>
                         <textarea placeholder="e.g., Fraud case status 'In Progress' > 48 hours without update..."></textarea>
@@ -476,13 +479,8 @@
                 <!-- Row 3: Digital -->
                 <tr>
                     <td>
-                        <div style="display: flex; align-items: flex-start;">
-                            <div class="selection-circle"></div>
-                            <div>
-                                <span class="scenario-title">Digital Intercept</span>
-                                <span class="scenario-desc">Website/App behavior</span>
-                            </div>
-                        </div>
+                        <span class="scenario-title">Digital Intercept</span>
+                        <span class="scenario-desc">Website/App behavior</span>
                     </td>
                     <td>
                         <textarea placeholder="e.g., Rage clicks on 'Transfer Funds' or scroll loop on Fee Schedule..."></textarea>
@@ -507,9 +505,9 @@
             </p>
             
             <div class="input-label-group">Knowledge Sources (PDFs, FAQs, Policies)</div>
-            <input type="text" class="input-lines" placeholder="1.">
-            <input type="text" class="input-lines" placeholder="2.">
-            <input type="text" class="input-lines" placeholder="3.">
+            <input type="text" class="input-lines" placeholder="e.g., Product Manuals (PDF)">
+            <input type="text" class="input-lines" placeholder="e.g., Support Policy FAQs">
+            <input type="text" class="input-lines" placeholder="e.g., Compliance Guidelines">
             
             <div class="input-label-group" style="margin-top: 15px;">3rd Party Integrations (Systems of Record)</div>
             <input type="text" class="input-lines" placeholder="e.g., Salesforce, ServiceNow, Zendesk">
@@ -542,6 +540,28 @@
         <div class="logo">qualtrics.<span style="color: #0099ff;">XM</span></div>
         <div>Agentic AI Strategy Workshop</div>
     </footer>
+
+    <script>
+        // Allow deselection of radio buttons
+        document.querySelectorAll('.risk-point input[type="radio"]').forEach(radio => {
+            radio.addEventListener('click', function(e) {
+                // If this radio was already checked (stored in data-checked), uncheck it
+                if (this.getAttribute('data-checked') === 'true') {
+                    this.checked = false;
+                    this.setAttribute('data-checked', 'false');
+                    // Force blur to remove focus styles if desired
+                    this.blur();
+                } else {
+                    // Uncheck all others in the group within our metadata
+                    document.querySelectorAll(`input[name="${this.name}"]`).forEach(other => {
+                        other.setAttribute('data-checked', 'false');
+                    });
+                    // Mark this one as checked
+                    this.setAttribute('data-checked', 'true');
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
