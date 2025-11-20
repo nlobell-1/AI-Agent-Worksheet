@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qualtrics Agentic Design Canvas</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+        :root {
+            --primary: #000000; /* Qualtrics Black/Dark Grey equivalent */
+            --secondary: #2E2E2E;
+            --accent: #0099ff; /* Qualtrics Blue-ish accent for highlights */
+            --light-bg: #f4f6f8;
+            --border: #e1e4e8;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: var(--secondary);
+            line-height: 1.5;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Print Optimization */
+        @media print {
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                padding: 0;
+            }
+            .no-print {
+                display: none;
+            }
+        }
+
+        header {
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: -0.5px;
+        }
+
+        .sub-header {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .meta-info {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .meta-field {
+            border-bottom: 1px solid #999;
+            display: inline-block;
+            width: 200px;
+            margin-left: 10px;
+        }
+
+        /* Common Section Styles */
+        .section {
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .section-number {
+            background-color: var(--primary);
+            color: #fff;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        /* Phase 1: Risk Scale */
+        .risk-scale-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .risk-line {
+            position: absolute;
+            top: 15px;
+            left: 40px;
+            right: 40px;
+            height: 4px;
+            background: linear-gradient(to right, #4CAF50, #FFC107, #FF5722);
+            z-index: 0;
+            border-radius: 2px;
+        }
+
+        .risk-point {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            width: 22%;
+        }
+
+        .dot {
+            width: 30px;
+            height: 30px;
+            background-color: #fff;
+            border: 3px solid var(--secondary);
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+        }
+
+        .risk-label {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .risk-desc {
+            font-size: 11px;
+            color: #666;
+        }
+
+        /* Phase 2: Problem Discovery Grid */
+        .discovery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .discovery-col h3 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .discovery-subtext {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 15px;
+            display: block;
+            min-height: 36px;
+        }
+
+        /* Phase 3: The Matrix Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th {
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+            padding: 10px;
+            border-bottom: 2px solid var(--border);
+            width: 20%;
+        }
+
+        th.large-col {
+            width: 30%;
+        }
+
+        td {
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .scenario-title {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 15px;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .scenario-desc {
+            font-size: 12px;
+            color: #555;
+            font-style: italic;
+        }
+
+        /* Visual selector circle */
+        .selection-circle {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            top: 2px;
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px dashed #ccc;
+            background-color: #fafafa;
+            padding: 8px;
+            font-family: 'Inter', sans-serif;
+            resize: none;
+            min-height: 80px;
+            font-size: 13px;
+            border-radius: 4px;
+        }
+        
+        .tall-textarea {
+            min-height: 120px;
+        }
+
+        /* Phase 4 & 5: Knowledge & KPI */
+        .two-col-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .input-box {
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 15px;
+            background: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .input-box h3 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .input-label-group {
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .input-lines {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            margin-bottom: 8px;
+            padding: 5px 0;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+        }
+        
+        .input-lines:focus {
+            outline: none;
+            border-bottom: 1px solid var(--accent);
+        }
+
+        footer {
+            margin-top: 40px;
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            font-weight: 900;
+            letter-spacing: -1px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .btn-print {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .btn-print:hover {
+            opacity: 0.9;
+        }
+
+    </style>
+</head>
+<body>
+
+    <button class="btn-print no-print" onclick="window.print()">Download / Print Canvas</button>
+
+    <header>
+        <div>
+            <h1>Agentic Workshop Canvas</h1>
+        </div>
+        <div class="meta-info">
+            <div>Client: <span class="meta-field"></span></div>
+            <div style="margin-top:5px;">Date: <span class="meta-field"></span></div>
+        </div>
+    </header>
+
+    <!-- Phase 1: Calibration -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">1</div>
+            <h2>Risk & Autonomy Calibration</h2>
+        </div>
+        <p style="font-size: 13px; color: #555; margin-top: -10px; margin-bottom: 20px;">
+            Where is the organization comfortable allowing AI to act today? Mark your current appetite for risk.
+        </p>
+        
+        <div class="risk-scale-container">
+            <div class="risk-line"></div>
+            
+            <div class="risk-point">
+                <div class="dot"></div>
+                <div class="risk-label">Advisory</div>
+                <div class="risk-desc">Human in the loop.<br>AI drafts, Human approves.</div>
+            </div>
+
+            <div class="risk-point">
+                <div class="dot"></div>
+                <div class="risk-label">Autopilot</div>
+                <div class="risk-desc">Human on the loop.<br>AI acts, Human can override.</div>
+            </div>
+
+            <div class="risk-point">
+                <div class="dot"></div>
+                <div class="risk-label">Autonomous</div>
+                <div class="risk-desc">Human out of the loop.<br>Fully automated resolution.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phase 2: Problem Identification -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">2</div>
+            <h2>Problem & Opportunity Discovery</h2>
+        </div>
+        
+        <div class="discovery-grid">
+            <!-- Left Column: Problems -->
+            <div class="discovery-col">
+                <h3>Top Problems</h3>
+                <span class="discovery-subtext">What are the top customer friction points or operational bottlenecks?</span>
+                <input type="text" class="input-lines" placeholder="1.">
+                <input type="text" class="input-lines" placeholder="2.">
+                <input type="text" class="input-lines" placeholder="3.">
+                <input type="text" class="input-lines" placeholder="4.">
+                <input type="text" class="input-lines" placeholder="5.">
+            </div>
+
+            <!-- Right Column: Automation Fit -->
+            <div class="discovery-col">
+                <h3>Automation Potential</h3>
+                <span class="discovery-subtext">Which of these are high-volume, rule-based, or data-driven?</span>
+                <input type="text" class="input-lines" placeholder="1.">
+                <input type="text" class="input-lines" placeholder="2.">
+                <input type="text" class="input-lines" placeholder="3.">
+                <input type="text" class="input-lines" placeholder="4.">
+                <input type="text" class="input-lines" placeholder="5.">
+            </div>
+        </div>
+    </div>
+
+    <!-- Phase 3: Service Design Matrix -->
+    <div class="section">
+        <div class="section-header">
+            <div class="section-number">3</div>
+            <h2>Select & Define ONE Pilot Use Case</h2>
+        </div>
+        <p style="font-size: 13px; color: #555; margin-top: -10px;">
+            Choose <strong>ONE</strong> channel to define for your pilot. Mark the selection circle and leave the others blank.
+        </p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 18%;">Channel</th>
+                    <th style="width: 25%;">The Trigger (Signal)</th>
+                    <th class="large-col">The Agent Action (Experience)</th>
+                    <th>Business Value (ROI)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Row 1: Survey -->
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: flex-start;">
+                            <div class="selection-circle"></div>
+                            <div>
+                                <span class="scenario-title">In-Survey Triage</span>
+                                <span class="scenario-desc">Real-time feedback interception</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Detractor score on 'Mortgage App Ease' or 'Document Upload' failure..."></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Agent pops up immediately: 'I see you are stuck on the W2 upload. Would you like a secure email link instead?'"></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Reduce callbacks by 15%"></textarea>
+                    </td>
+                </tr>
+
+                <!-- Row 2: Tickets -->
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: flex-start;">
+                            <div class="selection-circle"></div>
+                            <div>
+                                <span class="scenario-title">Ticket Management</span>
+                                <span class="scenario-desc">Post-interaction recovery</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Fraud case status 'In Progress' > 48 hours without update..."></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Agent drafts personalized email: 'We are still reviewing with the merchant, no action needed from you.' (Human Approves)"></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Reduce 'Where is my ticket?' inbound calls"></textarea>
+                    </td>
+                </tr>
+
+                <!-- Row 3: Digital -->
+                <tr>
+                    <td>
+                        <div style="display: flex; align-items: flex-start;">
+                            <div class="selection-circle"></div>
+                            <div>
+                                <span class="scenario-title">Digital Intercept</span>
+                                <span class="scenario-desc">Website/App behavior</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Rage clicks on 'Transfer Funds' or scroll loop on Fee Schedule..."></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Proactive pop-up: 'Choosing a portfolio is complex. Would you like to see a comparison table?'"></textarea>
+                    </td>
+                    <td>
+                        <textarea placeholder="e.g., Increase conversion to funded account"></textarea>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Phase 4 & 5: Governance & Knowledge -->
+    <div class="two-col-grid">
+        <div class="input-box">
+            <h3>4. Data & Systems Audit</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 10px;">
+                What documents and systems does the Agent need access to?
+            </p>
+            
+            <div class="input-label-group">Knowledge Sources (PDFs, FAQs, Policies)</div>
+            <input type="text" class="input-lines" placeholder="1.">
+            <input type="text" class="input-lines" placeholder="2.">
+            <input type="text" class="input-lines" placeholder="3.">
+            
+            <div class="input-label-group" style="margin-top: 15px;">3rd Party Integrations (Systems of Record)</div>
+            <input type="text" class="input-lines" placeholder="e.g., Salesforce, ServiceNow, Zendesk">
+            <input type="text" class="input-lines" placeholder="e.g., Order Management API, Snowflake">
+            <input type="text" class="input-lines" placeholder="e.g., Internal Knowledge Base">
+        </div>
+
+        <div class="input-box">
+            <h3>5. Success Metrics & Governance Team</h3>
+            <p style="font-size: 12px; color: #666; margin-bottom: 15px;">
+                How will we measure success and who needs to sign off?
+            </p>
+            <div style="margin-bottom: 15px;">
+                <label style="font-size: 12px; font-weight: 600;">Primary KPI:</label>
+                <input type="text" class="input-lines" placeholder="e.g., % of Deflected Tickets">
+            </div>
+            
+            <div>
+                <label style="font-size: 12px; font-weight: 600;">Governance / Ownership:</label>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 5px;">
+                    <input type="text" class="input-lines" placeholder="Business Lead">
+                    <input type="text" class="input-lines" placeholder="Technical Lead">
+                </div>
+                <input type="text" class="input-lines" placeholder="Compliance / Risk Lead">
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="logo">qualtrics.<span style="color: #0099ff;">XM</span></div>
+        <div>Agentic AI Strategy Workshop</div>
+    </footer>
+
+</body>
+</html>
